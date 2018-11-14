@@ -9,16 +9,16 @@
     <update id="updateGuestInformation" parameterType="com.tysj.domain.GuestInformation">
         UPDATE guestinformation
         <set>
-            <if test="tableNumber !=null and tableNumber !=''">
+            <if test="tableNumber!=null and tableNumber !=''">
                 tableNumber=#{tableNumber},
             </if>
-            <if test="guestName !=null and guestName !=''">
+            <if test="guestName!=null and guestName !=''">
                 guestName=#{guestName},
             </if>
             <if test="guestPhone!=null and guestPhone !=''">
                 guestPhone =#{guestPhone},
             </if>
-            <if test="erp!=null and erp !=''">
+            <if test="remarks!=null and remarks !=''">
                 remarks =#{remarks},
             </if>
             <if test="state!=null and state !=''">
@@ -31,7 +31,7 @@
                 preTableTime =#{preTableTime},
             </if>
             <if test="operator!=null and operator !=''">
-                operator =#{operator},
+                operator =#{operator}
             </if>
         </set>
         WHERE id=#{id}
@@ -43,6 +43,9 @@
             state=0
         </set>
         <where>
+            <if test="id!=null and id!=''">
+                AND id =#{id}
+            </if>
             <if test="tableNumber!=null and tableNumber!=''">
                 AND tableNumber=#{tableNumber}
             </if>
@@ -50,7 +53,7 @@
                 AND guestName=#{guestName}
             </if>
             <if test="guestPhone!=null and guestPhone !=''">
-                AND guestPhone =#{guestPhone},
+                AND guestPhone =#{guestPhone}
             </if>
             AND state=1
         </where>
@@ -59,6 +62,11 @@
     <select id="queryGuestInformations" parameterType="com.tysj.domain.GuestInformation"
             resultType="com.tysj.domain.GuestInformation">
         SELECT * FROM guestinformation WHERE state=1
+    </select>
+
+    <select id="queryIdGuestInformation" parameterType="com.tysj.domain.GuestInformation"
+            resultType="com.tysj.domain.GuestInformation">
+        SELECT * FROM guestinformation WHERE id=#{id} AND state=1
     </select>
 
 </mapper>

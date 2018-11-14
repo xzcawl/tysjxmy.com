@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- datasource setting -->
+    <bean id="tysjDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${testDataSource.driver}" />
+        <property name="url" value="${testDataSource.url}" />
+        <property name="username" value="${testDataSource.username}" />
+        <property name="password" value="${testDataSource.password}" />
+        <property name="maxActive" value="20" />
+        <property name="maxIdle" value="10" />
+        <property name="minIdle" value="5" />
+        <property name="initialSize" value="3" />
+        <property name="maxWait" value="1500" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="180000" />
+    </bean>
+
+    <!-- 配置SqlSessionFactory -->
+    <bean id="tysjSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="tysjDataSource"/>
+        <property name="typeAliasesPackage" value="com.tysj.domain"/>
+        <!-- dao接口能不能和mapper.xml不在同一个文件夹需要配置 -->
+        <property name="mapperLocations" value="classpath:mybatis/*.xml" />
+    </bean>
+
+    <!-- 通过扫描器的方式自动加载mapper -->
+    <bean id="tysjMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="tysjSqlSessionFactory"/>
+        <property name="basePackage" value="com.tysj.dao"/>
+    </bean>
+
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="tysjTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="tysjDataSource" />
+    </bean>
+    <tx:annotation-driven transaction-manager="tysjTransactionManager" proxy-target-class="true" />
+</beans>

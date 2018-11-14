@@ -1,0 +1,18 @@
+
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+
+<script type="text/javascript" language="javascript">
+
+
+        $.ajax({
+            type: "post",
+            url: "/guestInformation/getAllAppList1.do",
+            dataType: "text",
+            async: false,
+            success: function (data) {
+                console.log(data)
+            }
+        });
+
+
+    </script>
